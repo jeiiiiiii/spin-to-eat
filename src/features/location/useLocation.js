@@ -7,7 +7,7 @@ import LocationService from './locationService';
  * useLocation - The ONLY way components interact with location logic
  * Manages location state and integrates with AppContext
  */
-export function useLocation() {
+export function useLocation(shouldRequest = true) {
   const { state, dispatch } = useAppContext();
   const [isLocating, setIsLocating] = useState(false);
 
@@ -41,10 +41,12 @@ export function useLocation() {
     }
   }, [dispatch]);
 
-  // Request location on mount
+  // Request location on mount only if shouldRequest is true
   useEffect(() => {
-    requestLocation();
-  }, [requestLocation]);
+    if (shouldRequest) {
+      requestLocation();
+    }
+  }, [requestLocation, shouldRequest]);
 
   return {
     location: state.userLocation,
